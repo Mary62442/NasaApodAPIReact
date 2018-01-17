@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import classNames from 'classnames';
 
 class App extends Component {
 
@@ -10,7 +11,6 @@ class App extends Component {
   }
 
   componentDidMount() {
-
     let encode = encodeURIComponent;
     let mainUrl = "https://api.nasa.gov/planetary/apod";
     let key = {
@@ -34,31 +34,28 @@ class App extends Component {
       });
   }
 
-
-
   render() {
-
-    console.log(this.state.apods);
-
-
-    let apods = this.state.apods.map(apod => {
+    let apods = this.state.apods.map((apod, index) => {
+    let apodsClasses = classNames({
+      'item': true,
+      'item--large': ((index % 6) === 0),
+      'item--medium': ((index % 3) === 0),
+      'item--full': (index === 4),
+    });
+      
       return (
-        <div className="apod">
-          <div>{apod.title}</div>
-          <div>{apod.explanation}</div>
-          <div>
-            <img src={apod.url} alt="" width="20%" />{" "}
-          </div>
+        <div key = {index} className= {apodsClasses}  style= {{backgroundImage:'url(' + apod.url + ')'}}>
+          <p>{apod.title} {index}</p>   
         </div>
       );
     });
 
     return (
       <div className="App">
-        
           <h1 className="App-title">Apods from Nasa</h1>
-        
-          {apods}
+          <div className = "gridcontainer">
+            {apods}
+          </div>
       </div>
     );
   }
