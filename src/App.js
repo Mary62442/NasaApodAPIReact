@@ -7,7 +7,9 @@ class App extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {apods:[]}
+    this.state = {apods:[]};
+    this.date = new Date();
+    
   }
 
   componentDidMount() {
@@ -15,8 +17,8 @@ class App extends Component {
     let mainUrl = "https://api.nasa.gov/planetary/apod";
     let key = {
       api_key:'IDEmxsrJV481UMuno4ML82JwUcgmjkZPf45nW6rC',
-      start_date:'2018-01-02',
-      end_date:'2018-01-17',
+      start_date:'2018-01-04',
+      end_date:this.date.toISOString().substring(0, 10),
     };     
     let query = `?${Object.keys(key).map(k => `${encode(k)}=${encode(key[k])}`).join('&')}`;
     console.log(mainUrl.concat(query));
@@ -36,11 +38,12 @@ class App extends Component {
 
   render() {
     let apods = this.state.apods.map((apod, index) => {
+
     let apodsClasses = classNames({
       'item': true,
-      'item--large': ((index % 6) === 0),
+      'item--large': (index === 3 || index === 5),
       'item--medium': ((index % 3) === 0),
-      'item--full': (index === 4),
+      'item--full': (index === 6),
     });
       
       return (
@@ -54,7 +57,7 @@ class App extends Component {
       <div className="App">
           <h1 className="App-title">Apods from Nasa</h1>
           <div className = "gridcontainer">
-            {apods}
+            {apods.reverse()}
           </div>
       </div>
     );

@@ -3,3 +3,10 @@ body {
   padding: 0;
   font-family: sans-serif;
 }
+
+@supports (display: grid) {
+	body,
+	html {
+		display: block;
+	}
+}
