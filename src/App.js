@@ -1,40 +1,62 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import classNames from 'classnames';
+import {RandomDatesGenerator} from './randomdatesgenerator';
 
 class App extends Component {
 
   constructor(props) {
+    
     super(props);
-    this.state = {apods:[]};
+    this.timer = {};
+    this.state = {apods:[], arrayEnd: false};
     this.date = new Date();
+    this.rd = {};  
+    this.arrayOfDates = [];
     
   }
 
   componentDidMount() {
-    let encode = encodeURIComponent;
-    let mainUrl = "https://api.nasa.gov/planetary/apod";
-    let key = {
-      api_key:'IDEmxsrJV481UMuno4ML82JwUcgmjkZPf45nW6rC',
-      start_date:'2018-01-04',
-      end_date:this.date.toISOString().substring(0, 10),
-    };     
-    let query = `?${Object.keys(key).map(k => `${encode(k)}=${encode(key[k])}`).join('&')}`;
-    console.log(mainUrl.concat(query));
+    this.rd = new RandomDatesGenerator(1996,2018);  
+    this.arrayOfDates = this.rd.rangeDates(20);
 
-    fetch(mainUrl.concat(query), { method: "GET" })
-      .then(response => {
-        if (response.status >= 400) {
-          throw new Error("Bad response from server");
-        }
-        return response.json();
-      })
-      .then(apods => {
-        this.setState({ apods: apods });
+    this.fetchData();
+    this.timer = setInterval(this.fetchData, 60000);
 
-      });
+   
+
   }
+
+  fetchData = () => {      
+
+      console.log(this.arrayOfDates);
+      let item = this.arrayOfDates[0];
+
+      let encode = encodeURIComponent;
+      let mainUrl = "https://api.nasa.gov/planetary/apod";
+      let key = {
+        api_key:'IDEmxsrJV481UMuno4ML82JwUcgmjkZPf45nW6rC',
+        start_date:item.startDate,
+        end_date:item.endDate,
+      };     
+      let query = `?${Object.keys(key).map(k => `${encode(k)}=${encode(key[k])}`).join('&')}`;
+      
+
+      fetch(mainUrl.concat(query), { method: "GET" })
+        .then(response => {
+          if (response.status >= 400) {
+            throw new Error("Bad response from server");
+          }
+          return response.json();
+        })
+        .then(apods => {
+          this.arrayOfDates.shift();
+          if (this.arrayOfDates.length === 0) clearInterval(this.timer);       
+          
+          this.setState({ apods: apods });
+        });        
+      
+    }
 
   render() {
     let apods = this.state.apods.map((apod, index) => {
@@ -48,7 +70,7 @@ class App extends Component {
       
       return (
         <div key = {index} className= {apodsClasses}  style= {{backgroundImage:'url(' + apod.url + ')'}}>
-          <p>{apod.title} {index}</p>   
+          <p>{apod.title}</p>   
         </div>
       );
     });
