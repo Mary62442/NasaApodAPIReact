@@ -10,11 +10,11 @@ class StarrySky extends Component {
 
 	componentDidMount() {
 		this.addStars();
-		window.addEventListener('resize', this.addStars())
+		//window.addEventListener('resize', this.addStars())
 	}
 
 	componentWillUnount() {
-		window.removeEventListener('resize', this.addStars())
+		//window.removeEventListener('resize', this.addStars())
 	}
 
 	addStars = () => {
@@ -53,7 +53,7 @@ class StarrySky extends Component {
 }	
 
 	render() {
-		console.log(this.stars);
+		
 		return(
 			<div id="container">
 			{this.stars}

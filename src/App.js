@@ -108,10 +108,12 @@ class App extends Component {
         'item--large': (index === 3 || index === 5),
         'item--medium': ((index % 3) === 0),
         'item--full': (index === 6),
-      });     
+      });  
+
+      let key = `apod${index}`; 
         
       return (
-        <div key = {index} className= {apodsClasses}  style= {{backgroundImage:'url(' + apod.url + ')'}}>
+        <div key = {key} className= {apodsClasses}  style= {{backgroundImage:'url(' + apod.url + ')'}}>
           <p>{apod.title}</p>  
           <div className = "apod-explanation">
             <p>{apod.explanation}</p>
