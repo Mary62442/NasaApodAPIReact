@@ -5,6 +5,16 @@
   align-items:center;
 }
 
+.pag-button {
+  background-color:red;
+  padding:1em 2em;
+}
+.hide-button {
+  display:none;
+}
+
+
+
 
 .gridcontainer {
   justify-content: center;  

@@ -11,6 +11,14 @@ class RandomDatesGenerator {
   result.setDate(result.getDate() + days);
   return result;
 };
+
+  subDays = (date, days)=> {
+    let result = new Date(date);
+    result.setDate(result.getDate() - days);
+    return result;
+  };
+
+
   datesGenerator = () =>{
   let randomYear = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1) + min);
@@ -44,8 +52,11 @@ class RandomDatesGenerator {
   if (endDate > todayDate) this.randomDates();
   else
     return {
-      startDate:startDate.toISOString().substring(0, 10), 
-      endDate:endDate.toISOString().substring(0, 10)
+      //startDate:startDate.toISOString().substring(0, 10), 
+      //endDate:endDate.toISOString().substring(0, 10)
+
+      startDate:startDate, 
+      endDate:endDate,
     }    
 };
 
