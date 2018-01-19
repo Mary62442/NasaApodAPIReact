@@ -9,7 +9,7 @@ class App extends Component {
   constructor(props) {    
     super(props);
     this.timer = {};
-    this.state = {apods:[], arrayEnd: false};
+    this.state = {apods:[], arrayEnd: false, activeIndex : undefined};
     this.endDate = new Date();
     this.today = new Date();
     this.rd = {};  
@@ -50,16 +50,13 @@ class App extends Component {
     this.getStartDate(this.endDate); 
     this.fetchData();
   };
-  
 
-  componentDidMount() {
-
+  componentDidMount() {    
     this.rd = new RandomDatesGenerator(1996,2018);  
     //this.arrayOfDates = this.rd.rangeDates(20);    
     this.getStartDate(this.endDate);    
     this.fetchData();
-    //this.timer = setInterval(this.fetchData, 60000);  
-
+    //this.timer = setInterval(this.fetchData, 60000);
   };
 
   fetchData = () => {      
@@ -84,12 +81,15 @@ class App extends Component {
     .then(apods => {
       //this.arrayOfDates.shift();      
       this.setState({ apods: apods });
+
     });        
     
   };
+  handleClick = (index) => {
+    this.setState({activeIndex : index});
+  }
 
   render() {
-
     let nextTodayButtonClasses = classNames({
         'pag-button': true,
         'hide-button': (this.endDate.getTime() >= this.today.getTime()),        
@@ -100,20 +100,17 @@ class App extends Component {
         'hide-button': (this.endDate.getTime() <= new Date('1996-01-16')),        
       });
 
-
-
     let apods = this.state.apods.map((apod, index) => {
       let apodsClasses = classNames({
         'item': true,
+        'clicked': this.state.activeIndex === index,
         'item--large': (index === 3 || index === 5),
         'item--medium': ((index % 3) === 0),
         'item--full': (index === 6),
-      });  
+      });      
 
-      let key = `apod${index}`; 
-        
       return (
-        <div key = {key} className= {apodsClasses}  style= {{backgroundImage:'url(' + apod.url + ')'}}>
+        <div key = {index} onClick = {this.handleClick.bind(this, index)} className= {apodsClasses}  style= {{backgroundImage:'url(' + apod.url + ')'}}>
           <p>{apod.title}</p>  
           <div className = "apod-explanation">
             <p>{apod.explanation}</p>
@@ -123,23 +120,22 @@ class App extends Component {
     });
 
     return (
-      
       <div className="App">
-        <StarrySky />
-      
-          <h1 className="App-title">Apods from Nasa</h1>
-          <div className = "pagination">
-          
-          <button onClick = {this.prevApods} className = {prevButtonClasses}>Previous apods</button>
-          <button onClick = {this.nextApods} className = {nextTodayButtonClasses}>Next apods</button>
-          <button onClick = {this.randomApods} className = "pag-button">Random apods</button>
-          <button onClick = {this.todayApods} className = {nextTodayButtonClasses}>Today apods</button>
-          </div>
-          <div className = "gridcontainer">
-            {apods.reverse()}
-          </div>
-      </div>
-      
+        <StarrySky  />
+        <div onClick = {this.handleClick.bind(this, undefined)} className = {typeof this.state.activeIndex !== 'undefined' ? "dark-veil" : "hide-veil"}></div>
+    
+        <h1 className="App-title">Apods from Nasa</h1>
+        <div className = "pagination">
+        
+        <button onClick = {this.prevApods} className = {prevButtonClasses}>Previous apods</button>
+        <button onClick = {this.nextApods} className = {nextTodayButtonClasses}>Next apods</button>
+        <button onClick = {this.randomApods} className = "pag-button">Random apods</button>
+        <button onClick = {this.todayApods} className = {nextTodayButtonClasses}>Today apods</button>
+        </div>
+        <div className = "gridcontainer">
+          {apods.reverse()}
+        </div>
+      </div>      
     );
   }
 }
