@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import classNames from 'classnames';
 import {RandomDatesGenerator} from './randomdatesgenerator';
+import StarrySky from './starrysky';
 
 class App extends Component {
 
@@ -27,8 +28,7 @@ class App extends Component {
     }
     else {
       this.startDate = randomDatesGen.startDate;
-      this.endDate = randomDatesGen.endDate;
-      console.log(this.startDate, this.endDate);
+      this.endDate = randomDatesGen.endDate;      
       this.fetchData();
     }
   };
@@ -41,8 +41,7 @@ class App extends Component {
 
   nextApods = () => {    
     this.startDate = this.rd.addDays(this.endDate,1);    
-    this.endDate = this.rd.addDays(this.startDate,14);
-    console.log(this.startDate,this.endDate);
+    this.endDate = this.rd.addDays(this.startDate,14);    
     this.fetchData();
   };
 
@@ -54,6 +53,7 @@ class App extends Component {
   
 
   componentDidMount() {
+
     this.rd = new RandomDatesGenerator(1996,2018);  
     //this.arrayOfDates = this.rd.rangeDates(20);    
     this.getStartDate(this.endDate);    
@@ -112,7 +112,10 @@ class App extends Component {
         
       return (
         <div key = {index} className= {apodsClasses}  style= {{backgroundImage:'url(' + apod.url + ')'}}>
-          <p>{apod.title}</p>   
+          <p>{apod.title}</p>  
+          <div className = "apod-explanation">
+            <p>{apod.explanation}</p>
+          </div> 
         </div>
       );
     });
@@ -120,12 +123,16 @@ class App extends Component {
     return (
       
       <div className="App">
+        <StarrySky />
       
           <h1 className="App-title">Apods from Nasa</h1>
-          <button onClick = {this.randomApods} className = "pag-button">Random apods</button>
+          <div className = "pagination">
+          
           <button onClick = {this.prevApods} className = {prevButtonClasses}>Previous apods</button>
           <button onClick = {this.nextApods} className = {nextTodayButtonClasses}>Next apods</button>
+          <button onClick = {this.randomApods} className = "pag-button">Random apods</button>
           <button onClick = {this.todayApods} className = {nextTodayButtonClasses}>Today apods</button>
+          </div>
           <div className = "gridcontainer">
             {apods.reverse()}
           </div>
