@@ -71,18 +71,25 @@ class App extends Component {
       end_date:this.endDate.toISOString().substring(0, 10),
     };     
     let query = `?${Object.keys(key).map(k => `${encode(k)}=${encode(key[k])}`).join('&')}`; 
+    let status = {};
     fetch(mainUrl.concat(query), { method: "GET" })
     .then(response => {
       if (response.status >= 400) {
-        throw new Error("Bad response from server");
+        status = response.status;
+        console.log(response.status);
       }
       return response.json();
     })
     .then(apods => {
+      if(status !== 500) {
+        this.setState({ apods: apods });
+      }
       //this.arrayOfDates.shift();      
-      this.setState({ apods: apods });
-
-    });        
+      else {
+        
+        this.randomApods();
+      }
+    });            
     
   };
   handleClick = (index) => {
@@ -129,15 +136,11 @@ class App extends Component {
         return (
 
           <div key = {index} onClick = {this.handleClick.bind(this, index)} className= {apodsClasses}>
-            
             <p>{apod.title}</p>
-
-            
             <div onClick = {this.explClick.bind(this, index)} className = {explClasses}>
               <p>{apod.explanation}</p>
             </div> 
-
-            <iframe width= "100%" height="90%" src = {apod.url}/>
+            <iframe alt = {apod.title} width= "100%" height="90%" src = {apod.url}/>
             
           </div>
 
