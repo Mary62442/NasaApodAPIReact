@@ -9,7 +9,7 @@ class App extends Component {
   constructor(props) {    
     super(props);
     this.timer = {};
-    this.state = {apods:[], arrayEnd: false, activeIndex : undefined};
+    this.state = {apods:[], arrayEnd: false, activeIndex : undefined, explIndex : undefined};
     this.endDate = new Date();
     this.today = new Date();
     this.rd = {};  
@@ -86,19 +86,30 @@ class App extends Component {
     
   };
   handleClick = (index) => {
-    this.setState({activeIndex : index});
+    this.setState({activeIndex : index});    
+  };
+
+  setUndefined = (undef) => {
+    this.setState({activeIndex : undef, explIndex: undef});
+  };
+
+  explClick = (index) => {
+    if (typeof this.state.explIndex === 'undefined') this.setState({explIndex : index});
+    else this.setState({explIndex : undefined})
   }
 
   render() {
     let nextTodayButtonClasses = classNames({
-        'pag-button': true,
-        'hide-button': (this.endDate.getTime() >= this.today.getTime()),        
+      'pag-button': true,
+      'hide-button': (this.endDate.getTime() >= this.today.getTime()),        
       });
 
     let prevButtonClasses = classNames({
-        'pag-button': true,
-        'hide-button': (this.endDate.getTime() <= new Date('1996-01-16')),        
+      'pag-button': true,
+      'hide-button': (this.endDate.getTime() <= new Date('1996-01-16')),        
       });
+
+    
 
     let apods = this.state.apods.map((apod, index) => {
       let apodsClasses = classNames({
@@ -107,22 +118,47 @@ class App extends Component {
         'item--large': (index === 3 || index === 5),
         'item--medium': ((index % 3) === 0),
         'item--full': (index === 6),
-      });      
+      });    
+      let explClasses = classNames({
+      'apod-explanation': true,
+      'large-explanation': this.state.explIndex === index,        
+    });        
+
+      if (apod.media_type === 'video') {
+
+        return (
+
+          <div key = {index} onClick = {this.handleClick.bind(this, index)} className= {apodsClasses}>
+            <p>{apod.title}</p>
+            
+            <div onClick = {this.explClick.bind(this, index)} className = {explClasses}>
+              <p>{apod.explanation}</p>
+            </div> 
+
+            <iframe width= "100%" height="90%" src = {apod.url}/>
+            
+          </div>
+
+
+        )
+      }
+
+      else {
 
       return (
         <div key = {index} onClick = {this.handleClick.bind(this, index)} className= {apodsClasses}  style= {{backgroundImage:'url(' + apod.url + ')'}}>
           <p>{apod.title}</p>  
-          <div className = "apod-explanation">
+          <div onClick = {this.explClick.bind(this, index)} className = {explClasses}>
             <p>{apod.explanation}</p>
           </div> 
         </div>
-      );
+      );}
     });
 
     return (
       <div className="App">
         <StarrySky  />
-        <div onClick = {this.handleClick.bind(this, undefined)} className = {typeof this.state.activeIndex !== 'undefined' ? "dark-veil" : "hide-veil"}></div>
+        <div onClick = {this.setUndefined.bind(this, undefined)} className = {typeof this.state.activeIndex !== 'undefined' ? "dark-veil" : "hide-veil"}></div>
     
         <h1 className="App-title">Apods from Nasa</h1>
         <div className = "pagination">

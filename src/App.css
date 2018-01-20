@@ -89,8 +89,14 @@
   cursor:pointer;
 }
 
+.item > iframe {
+  border:none;
+  padding:0;
+  margin:0;
+}
 .clicked {
-  position:fixed;    
+  position:fixed;  
+  background-size:contain;  
   transition: all 0.1s linear;
   box-shadow:1px 1px 20px rgba(0,0,0,0.8);
   width:60%;
@@ -138,12 +144,30 @@
   font-size:15px;
   border-bottom-left-radius: 3px;
   border-bottom-right-radius: 3px;
-  padding:0 5px;
-  line-height:40px;
-  background-color:rgba(0,0,0,0.5);
+  padding:10px 5px;
+  line-height:20px;
+  background-color:rgba(0,0,0,0.7);
   box-sizing:border-box;
   
 }
+
+.large-explanation {
+  position:absolute;
+  bottom:0;
+  left:0;
+  width:100%;
+  color:white;
+  font-size:15px;
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+  padding:10px;
+  line-height:20px;
+  background-color:rgba(0,0,0,0.7);
+  box-sizing:border-box;  
+}
+
+
+
 
 .apod-explanation > p {
   margin:0;
@@ -151,6 +175,28 @@
   overflow: hidden;
   text-overflow: ellipsis;
   
+}
+
+.apod-explanation:before {
+  position:absolute;
+  content:'';
+  height:0;
+  top:-15px;
+  width:0;
+  border-bottom:15px solid rgba(0,0,0,0.7);
+  border-left:15px solid transparent;
+  border-right:15px solid transparent;
+  left:0;
+  right:0;
+  margin:0 auto;
+
+}
+
+.large-explanation > p{
+  white-space: normal;
+  overflow: initial;
+  text-overflow: initial;
+  text-align:justify;
 }
 
 @keyframes pulse {
