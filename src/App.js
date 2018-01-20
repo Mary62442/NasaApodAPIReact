@@ -14,7 +14,7 @@ class App extends Component {
     this.today = new Date();
     this.rd = {};  
     //this.arrayOfDates = [];   
-    this.startDate = null; 
+    this.startDate = new Date(); 
   };
 
   getStartDate = (endDate) => {
@@ -129,7 +129,9 @@ class App extends Component {
         return (
 
           <div key = {index} onClick = {this.handleClick.bind(this, index)} className= {apodsClasses}>
+            
             <p>{apod.title}</p>
+
             
             <div onClick = {this.explClick.bind(this, index)} className = {explClasses}>
               <p>{apod.explanation}</p>
@@ -147,8 +149,10 @@ class App extends Component {
 
       return (
         <div key = {index} onClick = {this.handleClick.bind(this, index)} className= {apodsClasses}  style= {{backgroundImage:'url(' + apod.url + ')'}}>
+          
           <p>{apod.title}</p>  
           <div onClick = {this.explClick.bind(this, index)} className = {explClasses}>
+            <p>{apod.date}</p>
             <p>{apod.explanation}</p>
           </div> 
         </div>
@@ -159,14 +163,18 @@ class App extends Component {
       <div className="App">
         <StarrySky  />
         <div onClick = {this.setUndefined.bind(this, undefined)} className = {typeof this.state.activeIndex !== 'undefined' ? "dark-veil" : "hide-veil"}></div>
-    
-        <h1 className="App-title">Apods from Nasa</h1>
+        
+        <div className = "headerTitle">
+          <p>{this.startDate.toISOString().substring(0, 10)}</p>
+          <h1 className="App-title">Apods from Nasa</h1>
+          <p>{this.endDate.toISOString().substring(0, 10)}</p>
+        </div>
         <div className = "pagination">
         
-        <button onClick = {this.prevApods} className = {prevButtonClasses}>Previous apods</button>
-        <button onClick = {this.nextApods} className = {nextTodayButtonClasses}>Next apods</button>
-        <button onClick = {this.randomApods} className = "pag-button">Random apods</button>
-        <button onClick = {this.todayApods} className = {nextTodayButtonClasses}>Today apods</button>
+        <button onClick = {this.prevApods} className = {prevButtonClasses}><i className="fa fa-chevron-circle-left fa-fw" aria-hidden="true"></i> Previous</button>
+        <button onClick = {this.nextApods} className = {nextTodayButtonClasses}>Next<i className="fa fa-chevron-circle-right fa-fw" aria-hidden="true"></i></button>
+        <button onClick = {this.randomApods} className = "pag-button">Random <i className="fa fa-random fa-fw" aria-hidden="true"></i></button>
+        <button onClick = {this.todayApods} className = {nextTodayButtonClasses}>Today <i className="fa fa-clock-o fa-fw" aria-hidden="true"></i> </button>
         </div>
         <div className = "gridcontainer">
           {apods.reverse()}

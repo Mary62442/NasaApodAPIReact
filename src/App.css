@@ -5,9 +5,15 @@
   padding:0 1em;
 }
 
-.App-title {
-  margin:0 ;
+.headerTitle {
+  display:flex;
+  align-items: center;
+  justify-content: space-around;
   color:white;
+}
+
+.App-title {
+  margin:0 ;  
   padding:1em;
 }
 
@@ -18,6 +24,7 @@
   z-index:3;
   position:fixed;
   display:block;
+  cursor:pointer;
 
 }
 .hide-veil {
@@ -29,6 +36,7 @@
   display:flex;
   justify-content:space-between;
   width:80%;
+
 }
 .pag-button {
   background-color:transparent;
@@ -107,6 +115,7 @@
   right:0;
   margin:auto;
   z-index:4;
+  cursor:initial;
 }
 
 .item:hover {
@@ -148,7 +157,7 @@
   line-height:20px;
   background-color:rgba(0,0,0,0.7);
   box-sizing:border-box;
-  
+  cursor:pointer;
 }
 
 .large-explanation {
@@ -164,6 +173,7 @@
   line-height:20px;
   background-color:rgba(0,0,0,0.7);
   box-sizing:border-box;  
+  cursor:pointer;
 }
 
 
@@ -176,6 +186,7 @@
   text-overflow: ellipsis;
   
 }
+
 
 .apod-explanation:before {
   position:absolute;
@@ -199,9 +210,25 @@
   text-align:justify;
 }
 
+
 @keyframes pulse {
   
   from {  transform: rotate(0deg) translateX(1px) rotate(0deg);  }
   to   {  transform: rotate(360deg) translateX(1px) rotate(-360deg);  }
   
+}
+
+@media (max-width:600px) {
+  .pagination {
+  
+  flex-direction:column;
+  
+}
+.App-title {
+  font-size:1.5em;
+  text-align:center;
+}
+.headerTitle > p {
+  font-size:0.8em;
+}
 }
