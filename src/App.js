@@ -9,7 +9,13 @@ class App extends Component {
   constructor(props) {    
     super(props);
     this.timer = {};
-    this.state = {apods:[], arrayEnd: false, activeIndex : undefined, explIndex : undefined};
+    this.state = {
+      apods:[], 
+      arrayEnd: false, 
+      activeIndex : undefined, 
+      explIndex : undefined,
+      loading:false
+    };
     this.endDate = new Date();
     this.today = new Date();
     this.rd = {};  
@@ -59,7 +65,8 @@ class App extends Component {
     //this.timer = setInterval(this.fetchData, 60000);
   };
 
-  fetchData = () => {      
+  fetchData = () => {   
+    this.setState({loading:true});   
     //console.log(this.arrayOfDates);
     //let item = this.arrayOfDates[0];
     //this.startDate.toISOString().substring(0, 10);    
@@ -82,7 +89,7 @@ class App extends Component {
     })
     .then(apods => {
       if(status !== 500) {
-        this.setState({ apods: apods });
+        this.setState({ apods: apods, loading:false });
       }
       //this.arrayOfDates.shift();      
       else {
@@ -106,6 +113,8 @@ class App extends Component {
   }
 
   render() {
+    
+    
     let nextTodayButtonClasses = classNames({
       'pag-button': true,
       'hide-button': (this.endDate.getTime() >= this.today.getTime()),        
@@ -136,11 +145,11 @@ class App extends Component {
         return (
 
           <div key = {index} onClick = {this.handleClick.bind(this, index)} className= {apodsClasses}>
-            <p>{apod.title}</p>
+            
             <div onClick = {this.explClick.bind(this, index)} className = {explClasses}>
               <p>{apod.explanation}</p>
             </div> 
-            <iframe alt = {apod.title} width= "100%" height="90%" src = {apod.url}/>
+            <iframe title = {apod.title} width= "100%" height="90%" src = {apod.url}/>
             
           </div>
 
@@ -166,7 +175,10 @@ class App extends Component {
       <div className="App">
         <StarrySky  />
         <div onClick = {this.setUndefined.bind(this, undefined)} className = {typeof this.state.activeIndex !== 'undefined' ? "dark-veil" : "hide-veil"}></div>
-        
+        <div ref="loader" className = {this.state.loading ? "loader" : "hide-button"}>
+          <div></div>
+        </div>
+        <div className = {this.state.loading ? "hide-button" : "show"} >
         <div className = "headerTitle">
           <p>{this.startDate.toISOString().substring(0, 10)}</p>
           <h1 className="App-title">Apods from Nasa</h1>
@@ -181,6 +193,7 @@ class App extends Component {
         </div>
         <div className = "gridcontainer">
           {apods.reverse()}
+        </div>
         </div>
       </div>      
     );
