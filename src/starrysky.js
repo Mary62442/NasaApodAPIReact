@@ -14,7 +14,7 @@ class StarrySky extends Component {
 		window.addEventListener('resize', this.addStars)
 	};
 
-	componentWillUnount() {
+	componentWillUnmount() {
 		window.removeEventListener('resize', this.addStars)
 	};
 
